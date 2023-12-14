@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Recettes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Ajout de styles personnalisés */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-center">Recettes</h1>
+
+        <div class="text-center mb-6">
+            <h2 class="text-xl font-bold mb-2">Proposer une recette</h2>
+            <form action="/recettes" method="post" class="flex flex-col items-center">
+                <input type="text" name="type_recette" placeholder="Type de recette" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full sm:w-auto">
+                <input type="number" name="nombre_personnes" placeholder="Nombre de personnes" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full sm:w-auto">
+                <input type="text" name="ingredients_disponibles" placeholder="Ingrédients disponibles" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full sm:w-auto">
+                <input type="submit" value="Proposer une recette" class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2 transition duration-300 ease-in-out w-full sm:w-auto">
+            </form>
+        </div>
+
+        <div id="resultat" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Loader -->
+            <div id="loader" class="w-full col-span-2 text-center mb-4">
+                <div class="inline-block animate-spin ease duration-300 rounded-full h-12 w-12 border-t-4 border-b-4 border-gray-900"></div>
+            </div>
+
+            {% if recettes %}
+                {% for recette in recettes %}
+                    <div class="bg-white shadow-md rounded-md p-4 transform transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
+                        <a href="/recettes/{{ recette['titre'] }}" class="text-blue-500 hover:underline font-bold text-xl mb-2 block">{{ recette['titre'] }}</a>
+                        <p class="text-gray-700">{{ recette['description'] }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Ajout d'une animation au chargement
+        window.addEventListener('load', () => {
+            document.getElementById('loader').style.display = 'none';
+            const items = document.querySelectorAll('#resultat div');
+            items.forEach(item => {
+                item.style.animation = 'fadeIn 0.5s ease-in-out forwards';
+            });
+        });
+    </script>
+</body>
+</html>
+

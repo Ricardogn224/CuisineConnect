@@ -1,0 +1,12 @@
+# Fichiers d'environnement
+.env
+
+# Fichiers pycache
+__pycache__
+
+# Fichiers de logs
+*.log
+
+# Dossiers virtuels
+venv/
+env/
