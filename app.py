@@ -17,12 +17,11 @@ secret_key = os.getenv("SECRET_KEY")
 openai.api_key = secret_key
 
 
-@app.route("/")
-def index():
+def get_recipes(number):
     # Afficher la liste des recettes africaines
     recettes = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=f"Propose 5 recettes de cuisine africaines avec les ingrédients de ton choix. Chaque recette doit être au format JSON avec les clés : titre, type, nombres de personnes, ingredients. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
+        prompt="Propose moi {number} recettes de cuisine africaine en utilisant des ingrédients de votre choix. Chaque recette doit être au format JSON avec les clés : titre, type, nombre de personnes, et ingrédients. Les clés doivent être en minuscules. Veuillez fournir une liste contenant {number} dictionnaires représentant les recettes, sans texte supplémentaire avant ou après la liste.",
         max_tokens=2000
     )
 
@@ -34,8 +33,37 @@ def index():
     except:
         recettes = []
 
-    print("list:", recettes)
-    return render_template("recettes.html")
+    print("call of get recipes :", recettes)
+    return recettes
+
+
+def get_recipe_form(type_recette, nombre_personnes, ingredients_disponibles):
+    # Générer la recette
+    recettes = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=f"Propose 5 recettes de {type_recette} pour {nombre_personnes} personnes avec les ingrédients suivants : {ingredients_disponibles}, Chaque recette doit être au format JSON avec les clés : titre, type, nombre de personnes, et ingrédients. Les clés doivent être en minuscules. Veuillez fournir une liste contenant 5 dictionnaires représentant les recettes, sans texte supplémentaire avant ou après la liste.",
+        max_tokens=2000
+    )
+    recettes = recettes.choices[0].text.strip()
+
+    try:
+        recettes = json.loads(recettes)
+    except:
+        recettes = []
+
+    return recettes
+
+
+@app.route("/")
+def index():
+    # Afficher la liste des recettes africaines
+    recettes = get_recipes(5)
+    # Si la liste est vide, on réessaye
+    while recettes == []:
+        recettes = get_recipes(5)
+
+    print("recipes on page recettes :", recettes)
+    return render_template("recettes.html", recettes=recettes)
 
 
 @app.route("/recettes", methods=["GET", "POST"])
@@ -46,16 +74,12 @@ def recettes():
         nombre_personnes = request.form["nombre_personnes"]
         ingredients_disponibles = request.form["ingredients_disponibles"]
 
-        # Générer la recette
-        recettes = openai.Completion.create(
-            engine="text-davinci-002",
-            prompt=f"Propose 5 recettes de {type_recette} pour {nombre_personnes} personnes avec les ingrédients suivants : {ingredients_disponibles}, le resultat doit etre un disctionnaire avec les clés suivantes : titre, type,nombres de personnes, ingredients, preparation,etape et au format json",
-            max_tokens=2000
-        )
-        recettes = recettes.choices[0].text.strip()
-        # conversion en json
-        recettes = json.loads(recettes)
-        print("list:", recettes)
+        recettes = get_recipe_form(type_recette, nombre_personnes,
+                                   ingredients_disponibles)
+        while recettes == []:
+            recettes = get_recipe_form(type_recette, nombre_personnes,
+                                       ingredients_disponibles)
+        print("list on page /recette :", recettes)
 
         # Retourner la liste des recettes
         return render_template("recettes.html", recettes=recettes)
