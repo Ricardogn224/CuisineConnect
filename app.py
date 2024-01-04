@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 import openai
 import json
 from dotenv import load_dotenv
@@ -117,6 +117,22 @@ def recette_detail(nom_recete):
 
     # Afficher la page de détail de la recette
     return render_template("recette_detail.html", nom_recete=nom_recete, recette=recette)
+
+
+@app.route('/ask', methods=['POST', 'GET'])
+def ask_chat():
+    if request.method == 'POST':
+        question = request.form['question']
+        # Utilisez l'API GPT-3 pour générer une réponse en fonction de la requête
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=f"tu es cuisinier qui a 8 ans d’expérience dans la cuisine. Tu es capable de répondre à des questions sur la cuisine. tu vas repondre en français. si la question conserne la cuisine repond sionon explique que tu est cuisinier et que ce n'ai pas dans tes compétences : \n\nQ: {question} ?\nA:",
+            max_tokens=2000
+        )
+        result = response.choices[0].text.strip()
+        return jsonify(result=result)
+    else:
+        return render_template('index.html')
 
 
 if __name__ == "__main__":

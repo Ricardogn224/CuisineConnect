@@ -46,8 +46,43 @@
                     </div>
                 {% endfor %}
             {% endif %}
+
+            
+        </div>
+        <div class="chatbot-container">
+            <h2 class="text-center">Parler à un Assistant Cuisinier</h2>
+            <div id="chat-messages" class="border border-gray-300 rounded-md p-4 max-h-64 overflow-y-auto"></div>
+            <div id="chat-input-container" class="flex mt-4">
+                <input id="user-input" type="text" placeholder="Posez votre question..." class="w-3/4 py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-indigo-600">
+                <button id="send-button" class="w-1/4 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-r-md focus:outline-none hover:bg-indigo-700">Envoyer</button>
+            </div>
+            <div class="chatbot-loader text-center mt-4" id="chatbot-loader" style="display: none;">
+                <img src="loader.gif" alt="Chargement...">
+            </div>
         </div>
     </div>
+
+
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(function() {
+                var userMessage = $('#user-input').val();
+                $('#user-input').val('');
+                
+                $('#chat-messages').append('<div class="user-message bg-gray-200 rounded-md p-2 my-1">' + userMessage + '</div>');
+                $('#chatbot-loader').show();
+                
+                $.post('/ask', { question: userMessage }, function(data) {
+                    var botResponse = data.result;
+                    $('#chat-messages').append('<div class="agent-message bg-indigo-600 text-white rounded-md p-2 my-1">' + botResponse + '</div>');
+                    $('#chatbot-loader').hide();
+                });
+            });
+        });
+    </script>
 
     <script>
         // Ajout d'une animation au chargement
