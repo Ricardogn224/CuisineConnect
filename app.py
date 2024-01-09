@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, jsonify, url_for
 import openai
 import json
 from dotenv import load_dotenv
+import programmes.db_interaction as db_inter
 import os
 
 app = Flask(__name__)
@@ -133,6 +134,23 @@ def ask_chat():
         return jsonify(result=result)
     else:
         return render_template('index.html')
+    
+@app.route('/inscription', methods=['POST', 'GET'])	
+def inscription():
+    if request.method == 'POST':
+        pseudo = request.form['pseudonyme']
+        email = request.form['email']
+        password = request.form['password']
+        adresse = request.form['adresse']
+        telephone = request.form['Date de naissance']
+        
+        print( "Valeur rentrée :" ,pseudo, email, password, adresse, telephone)
+        
+        db_inter.insert_user(pseudo, email, password, adresse, telephone)
+        return render_template('index.html')
+    else:
+        return render_template('inscription.html')
+    
 
 
 if __name__ == "__main__":
