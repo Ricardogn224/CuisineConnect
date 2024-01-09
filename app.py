@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, jsonify
+from flask import Flask, request, render_template, redirect, jsonify, url_for
 import openai
 import json
 from dotenv import load_dotenv
@@ -20,7 +20,7 @@ openai.api_key = secret_key
 def get_recipes(number):
     # Afficher la liste des recettes africaines
     recettes = openai.Completion.create(
-        engine="text-davinci-002",
+        engine="gpt-3.5-turbo-instruct",
         prompt="Propose moi {number} recettes de cuisine africaine en utilisant des ingrédients de votre choix. Chaque recette doit être au format JSON avec les clés : titre, type, nombre de personnes, et ingrédients. Les clés doivent être en minuscules. Veuillez fournir une liste contenant {number} dictionnaires représentant les recettes, sans texte supplémentaire avant ou après la liste.",
         max_tokens=2000
     )
@@ -40,7 +40,7 @@ def get_recipes(number):
 def get_recipe_form(type_recette, nombre_personnes, ingredients_disponibles):
     # Générer la recette
     recettes = openai.Completion.create(
-        engine="text-davinci-002",
+        engine="gpt-3.5-turbo-instruct",
         prompt=f"Propose 5 recettes de {type_recette} pour {nombre_personnes} personnes avec les ingrédients suivants : {ingredients_disponibles}, Chaque recette doit être au format JSON avec les clés : titre, type, nombre de personnes, et ingrédients. Les clés doivent être en minuscules. Veuillez fournir une liste contenant 5 dictionnaires représentant les recettes, sans texte supplémentaire avant ou après la liste.",
         max_tokens=2000
     )
@@ -86,7 +86,7 @@ def recettes():
     else:
         # Afficher la liste des recettes africaines
         recettes = openai.Completion.create(
-            engine="text-davinci-002",
+            engine="gpt-3.5-turbo-instruct",
             prompt=f"Propose 5 recettes de cuisine africaines avec les ingrédients de ton choix. Chaque recette doit être au format JSON avec les clés : titre, type, nombres de personnes, ingredients. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
             max_tokens=2000
         )
@@ -108,8 +108,8 @@ def recette_detail(nom_recete):
     # Obtenir la recette
     # Afficher la liste des recettes africaines
     recette = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=f"Explique moi comment faire la recette : {nom_recete} peut tu me repondre en francais s'il te plait !, rajoute moi le temps de cuisons entre les Etapes, parle moi en français s'il te plait !  ",
+        engine="gpt-3.5-turbo-instruct",
+        prompt=f"Explique moi comment faire la recette : {nom_recete} peux tu me repondre en francais s'il te plait !, rajoute moi le temps de cuisson entre les Etapes, parle moi en français s'il te plait !  ",
         max_tokens=4000
     )
 
@@ -125,8 +125,8 @@ def ask_chat():
         question = request.form['question']
         # Utilisez l'API GPT-3 pour générer une réponse en fonction de la requête
         response = openai.Completion.create(
-            engine="text-davinci-002",
-            prompt=f"tu es cuisinier qui a 8 ans d’expérience dans la cuisine. Tu es capable de répondre à des questions sur la cuisine. tu vas repondre en français. si la question conserne la cuisine repond sionon explique que tu est cuisinier et que ce n'ai pas dans tes compétences : \n\nQ: {question} ?\nA:",
+            engine="gpt-3.5-turbo-instruct",
+            prompt=f"tu es cuisinier qui a 8 ans d’expérience dans la cuisine. Tu es capable de répondre à des questions sur la cuisine. tu vas repondre en français. si la question conserne la cuisine repond sinon explique que tu es cuisinier et que ce n'est pas dans tes compétences : \n\nQ: {question} ?\nA:",
             max_tokens=2000
         )
         result = response.choices[0].text.strip()

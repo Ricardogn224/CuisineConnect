@@ -1,0 +1,32 @@
+.container-detail{
+    margin: 5%;
+
+}
+
+.container-detail .text-container-detail{
+    min-width: 70%;
+}
+
+.back-button-container{
+    display: flex;
+    justify-content: flex-start;
+    margin: 2% 0;
+}
+
+.back-button-container .back-button{
+    width: 30%;
+}
+
+.chatbot-container .title-chatbot{
+    display: flex;
+    justify-content: center;
+}
+
+.chatbot-container .title-chatbot h2{
+    width: 30%;
+    font-weight: bold;
+}
+
+#chat-messages{
+    display: none;
+}
