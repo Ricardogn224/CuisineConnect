@@ -1,12 +1,25 @@
-from flask import Flask, request, render_template, redirect, jsonify, url_for
+from flask import Flask, request, render_template, redirect, jsonify, url_for, session
 import openai
 import json
 from dotenv import load_dotenv
 import programmes.db_interaction as db_inter
 import os
+from functools import wraps
+from flask import session, redirect, url_for
+from flask_session import Session
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            return redirect(url_for('connexion'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 app = Flask(__name__)
-
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 # Charger les variables d'environnement depuis le fichier .env
 load_dotenv()
@@ -56,6 +69,7 @@ def get_recipe_form(type_recette, nombre_personnes, ingredients_disponibles):
 
 
 @app.route("/")
+@login_required
 def index():
     # Afficher la liste des recettes africaines
     recettes = get_recipes(5)
@@ -68,6 +82,7 @@ def index():
 
 
 @app.route("/recettes", methods=["GET", "POST"])
+@login_required
 def recettes():
     # Récupérer les paramètres de la requête
     if request.method == "POST":
@@ -105,6 +120,7 @@ def recettes():
 
 
 @app.route("/recettes/<nom_recete>", methods=["GET"])
+@login_required
 def recette_detail(nom_recete):
     # Obtenir la recette
     # Afficher la liste des recettes africaines
@@ -121,6 +137,7 @@ def recette_detail(nom_recete):
 
 
 @app.route('/ask', methods=['POST', 'GET'])
+@login_required
 def ask_chat():
     if request.method == 'POST':
         question = request.form['question']
@@ -142,15 +159,49 @@ def inscription():
         email = request.form['email']
         password = request.form['password']
         adresse = request.form['adresse']
-        telephone = request.form['Date de naissance']
+        telephone = request.form['telephone']
         
         print( "Valeur rentrée :" ,pseudo, email, password, adresse, telephone)
         
-        db_inter.insert_user(pseudo, email, password, adresse, telephone)
-        return render_template('index.html')
+        try :
+            db_inter.insert_user(pseudo, email, password, adresse, telephone)
+        except :
+            print("erreur")
+
+        print('insertion ok')
+        return render_template('recettes.html')
     else:
-        return render_template('inscription.html')
+        return render_template('connexion.html')
     
+
+
+@app.route('/connexion', methods=['POST', 'GET'])
+def connexion():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        # Vérification des informations de connexion
+        user = db_inter.get_user(email, password)
+        if user:
+            # Authentification réussie, définir la session
+            session['logged_in'] = True
+            
+            return render_template('recettes.html')
+        else:
+            # Gestion des erreurs pour une connexion invalide
+            print("Erreur de connexion")
+            return render_template('connexion.html')
+    else:
+        return render_template('connexion.html')
+
+@app.route('/deconnexion')
+def deconnexion():
+    # Supprimer les informations de session
+    session.pop('logged_in', None)
+    session.pop('user_id', None)
+    # Rediriger vers la page de connexion ou toute autre page
+    return redirect(url_for('connexion'))
 
 
 if __name__ == "__main__":

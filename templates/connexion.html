@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/metro-logo.svg') }}" type="image/x-icon">
+    <title>Connexion</title>
+</head>
+<body>
+    <main>
+        <section class="l-flex">
+            <!-- header-->
+            <section class=" flex-center bg-blue computer p-w-35">
+                <div class="flex-center ">
+                    <div class="p-20">
+                        <div class=" flex-center mb-30">
+                            <img class="logo" src="{{ url_for('static', filename='images/metro-logo.svg') }}" alt="">
+                        </div>
+
+                        <div class="flex flex-center">
+                        
+                                <div><a href=""><img  class="mr-30 social-logo" src="{{ url_for('static', filename='images/Icone-linkedin.svg') }}"  alt="linkedin"></a></div>
+                                <div><a href=""><img  class="social-logo" src="{{ url_for('static', filename='images/Icone-facebook-square.svg') }}"  alt="facebook"></a></div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            <!-- header-->
+
+            <!-- Connexion-->
+            <section class="p-w-65">
+
+            <div class="position">
+
+                <h1 class="mb-30">Bienvenue </h1>
+
+                <form method="POST" action="/connexion">
+                    <div class="flex flex-column mb-30">
+                        <label for="" class="mb-10">email</label>
+                        <input name="email" class="input-form" type="text">
+                    </div>
+
+                    <div class="flex flex-column mb-30">
+                        <label for="" class="mb-10 ">password</label>
+                        <input name="password" type="text" class="input-form">
+                    </div>
+
+                    <div class="flex space-between">
+                        <div class="">
+                            <input type="checkbox" name="remenber" id="" value="true"> <label for="">Se souvenir de moi</label>
+                        </div>
+
+                        <div>
+                            <a href="http://"><i> Mot de passe oublié ?</i></a>
+                        </div>
+                    </div>
+
+                    <div class="flex-center flex-column mt-20 ">
+                        <input type="submit" value="CONNEXION" class="btn-submit bg-blue">
+
+                        <p>En vous connectant, vous acceptez les <a href="">conditions d’utilisation</a>, la <a href="http://"> politique de confidentialité </a>, les <a href="http://"> conditions générales de ventes</a> et les <a href="http://">cookies</a> .</p>
+                    </div>
+
+                </form>
+
+            </div>
+
+            </section>
+            <!-- Connexion-->
+        </section>
+    </main>
+    
+</body>
+</html>
