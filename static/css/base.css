@@ -1,0 +1,24 @@
+.header-bg {
+    /* Utilisez cette classe pour ajouter des styles spécifiques qui ne sont pas couverts par Tailwind */
+    background: #000000; /* Noir */
+    opacity: 1; /* Opacité totale */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.header-content {
+    color: #FFFFFF;
+}
+
+.carnet-bineta {
+    font-family: 'Great Vibes';
+    font-size: 40px;
+}
+
+.menu {
+    font-size: 30px;
+    margin-left: 12px;
+}
+
+

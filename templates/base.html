@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Recettes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Great Vibes' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <style>
+        /* Ajout de styles personnalisés */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-200">
+    <header class="top-0 left-0 right-0 h-20 bg-black text-white flex items-center justify-between px-4 z-10">
+        <!-- Section Menu -->
+        <div class="header-content flex items-center ml-8">
+            <button class="flex items-center text-white focus:outline-none">
+                <!-- Icône de menu ou texte ici -->
+                <img src="{{ url_for('static', filename='img/icone-menu-en-cercle.png') }}">
+                <span class="menu">Menu</span>
+            </button>
+        </div>
+
+        <!-- Titre du site -->
+        <div class="header-content text-center">
+            <span class="text-xl font-semibold carnet-bineta">Le carnet de Bineta</span>
+        </div>
+
+        <!-- Section de recherche et compte utilisateur -->
+        <div class="header-content flex items-center mr-8">
+            <!-- Icône de recherche -->
+            <button class="text-white focus:outline-none mr-4">
+                <img src="{{ url_for('static', filename='img/icone-recherche-en-cercle.png') }}">
+            </button>
+            <!-- Icône de compte utilisateur -->
+            <button class="text-white focus:outline-none">
+                <img src="{{ url_for('static', filename='img/icone-utilisateur-en-cercle.png') }}">
+            </button>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

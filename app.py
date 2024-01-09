@@ -68,18 +68,34 @@ def get_recipe_form(type_recette, nombre_personnes, ingredients_disponibles):
     return recettes
 
 
+# @app.route("/")
+# def index():
+#     # Afficher la liste des recettes africaines
+#     recettes = get_recipes(5)
+#     # Si la liste est vide, on réessaye
+#     while recettes == []:
+#         recettes = get_recipes(5)
+#
+#     print("recipes on page recettes :", recettes)
+#     return render_template("recettes.html", recettes=recettes)
+
 @app.route("/")
-@login_required
-def index():
-    # Afficher la liste des recettes africaines
-    recettes = get_recipes(5)
+@login_required  # Afficher la liste des recettes africaines
+    # recettes = get_recipes(5)
     # Si la liste est vide, on réessaye
-    while recettes == []:
-        recettes = get_recipes(5)
-
-    print("recipes on page recettes :", recettes)
-    return render_template("recettes.html", recettes=recettes)
-
+    # while recettes == []:
+    #     recettes = get_recipes(5)
+    #
+    # print("recipes o
+def index():
+    # # Afficher la liste des recettes africaines
+    # recettes = get_recipes(5)
+    # # Si la liste est vide, on réessaye
+    # while recettes == []:
+    #     recettes = get_recipes(5)
+    #
+    # print("recipes on page recettes :", recettes)
+    return render_template("home.html", recettes=recettes)
 
 @app.route("/recettes", methods=["GET", "POST"])
 @login_required
@@ -187,7 +203,7 @@ def connexion():
             # Authentification réussie, définir la session
             session['logged_in'] = True
             
-            return render_template('recettes.html')
+            return redirect(url_for('index'))
         else:
             # Gestion des erreurs pour une connexion invalide
             print("Erreur de connexion")

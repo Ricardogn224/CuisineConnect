@@ -1,27 +1,12 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <title>Recettes</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    <style>
-        /* Ajout de styles personnalisés */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-</head>
-<body class="bg-gray-200">
+{% extends 'base.html' %}
+
+{% block title %}
+Recettes
+{% endblock %}
+
+{% block content %}
     <div class="main-page-background">
-        <div class="main-page-container mx-auto">
+    <div class="main-page-container mx-auto">
             <h1 class="text-3xl font-bold mb-6 text-center">Recettes</h1>
 
             <div class="research-container text-center mb-6">
@@ -35,7 +20,7 @@
                     <div class="flex justify-end mt-4 mb-5">
                         <input type="submit" value="Chercher une recette" class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2 transition duration-300 ease-in-out w-full sm:w-auto">
                     </div>
-                    
+
                 </form>
             </div>
 
@@ -59,12 +44,12 @@
                                     <p class="text-gray-700">{{ recette['description'] }}</p>
                                 </div>
                             </div>
-                            
+
                         </div>
                     {% endfor %}
                 {% endif %}
 
-                
+
             </div>
             <div class="chatbot-container">
                 <div class="title-chatbot">
@@ -84,7 +69,8 @@
     </div>
 
 
-    
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -92,12 +78,12 @@
             $('#send-button').click(function() {
                 var userMessage = $('#user-input').val();
                 $('#user-input').val('');
-                
+
                 $('#chat-messages').css( "display", "block" );
 
                 $('#chat-messages').append('<div class="user-message bg-gray-200 rounded-md p-2 my-1">' + userMessage + '</div>');
                 $('#chatbot-loader').show();
-                
+
                 $.post('/ask', { question: userMessage }, function(data) {
                     var botResponse = data.result;
                     $('#chat-messages').append('<div class="agent-message bg-indigo-600 text-white rounded-md p-2 my-1">' + botResponse + '</div>');
@@ -117,6 +103,8 @@
             });
         });
     </script>
-</body>
-</html>
+{% endblock %}
+
+
+
 

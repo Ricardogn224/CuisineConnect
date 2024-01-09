@@ -1,3 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Détail de la recette
+{% endblock %}
+
+{% block content %}
+    <div class="container-detail flex items-center justify-center">
+        <div class="text-container-detail bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+
+            <h1 class="text-3xl font-bold mb-6 text-center text-indigo-600">Détail de la recette</h1>
+            <h2 class="text-xl font-bold mb-2 text-indigo-600">{{nom_recete}}</h2>
+
+            <p class="text-lg text-gray-700">{{ recette }}</p>
+
+            <div class="back-button-container">
+                <a href="/recettes" class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg">Retour à la liste des recettes</a>
+            </div>
+
+
+            <div class="chatbot-container">
+                <div class="title-chatbot">
+                    <h2 class="">Parler à un Assistant Cuisinier</h2>
+                </div>
+
+                <div id="chat-messages" class="border border-gray-300 rounded-md p-4 max-h-64 overflow-y-auto"></div>
+                <div id="chat-input-container" class="flex mt-4">
+                    <input id="user-input" type="text" placeholder="Posez votre question..." class="w-3/4 py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-indigo-600">
+                    <button id="send-button" class="w-1/4 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-r-md focus:outline-none hover:bg-indigo-700">Envoyer</button>
+                </div>
+                <div class="chatbot-loader text-center mt-4" id="chatbot-loader" style="display: none;">
+                    <img src="loader.gif" alt="Chargement...">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(function() {
+                var userMessage = $('#user-input').val();
+                $('#user-input').val('');
+
+                $('#chat-messages').css( "display", "block" );
+
+                $('#chat-messages').append('<div class="user-message bg-gray-200 rounded-md p-2 my-1">' + userMessage + '</div>');
+                $('#chatbot-loader').show();
+
+                $.post('/ask', { question: userMessage }, function(data) {
+                    var botResponse = data.result;
+                    $('#chat-messages').append('<div class="agent-message bg-indigo-600 text-white rounded-md p-2 my-1">' + botResponse + '</div>');
+                    $('#chatbot-loader').hide();
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -36,9 +102,6 @@
         </div>
 
     </div>
-
-    
-    
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
