@@ -19,49 +19,66 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 p-4">
-    <div class="max-w-3xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6 text-center">Recettes</h1>
+<body class="bg-gray-200">
+    <div class="main-page-background">
+        <div class="main-page-container mx-auto">
+            <h1 class="text-3xl font-bold mb-6 text-center">Recettes</h1>
 
-        <div class="text-center mb-6">
-            <h2 class="text-xl font-bold mb-2">Proposer une recette</h2>
-            <form action="/recettes" method="post" class="flex flex-col items-center">
-                <input type="text" name="type_recette" placeholder="Type de recette" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full sm:w-auto">
-                <input type="number" name="nombre_personnes" placeholder="Nombre de personnes" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full sm:w-auto">
-                <input type="text" name="ingredients_disponibles" placeholder="Ingrédients disponibles" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full sm:w-auto">
-                <input type="submit" value="Proposer une recette" class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2 transition duration-300 ease-in-out w-full sm:w-auto">
-            </form>
-        </div>
-
-        <div id="resultat" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Loader -->
-            <div id="loader" class="w-full col-span-2 text-center mb-4">
-                <div class="inline-block animate-spin ease duration-300 rounded-full h-12 w-12 border-t-4 border-b-4 border-gray-900"></div>
-            </div>
-
-            {% if recettes %}
-                {% for recette in recettes %}
-                    <div class="bg-white shadow-md rounded-md p-4 transform transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
-                        <a href="/recettes/{{ recette['titre'] }}" class="text-blue-500 hover:underline font-bold text-xl mb-2 block">{{ recette['titre'] }}</a>
-                        <p class="text-gray-700">{{ recette['description'] }}</p>
+            <div class="research-container text-center mb-6">
+                <form action="/recettes" method="post" class="">
+                    <div class="flex">
+                        <input type="text" name="type_recette" placeholder="Type de recette" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full mr-5">
+                        <input type="number" name="nombre_personnes" placeholder="Nombre de personnes" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full mr-5">
+                        <input type="text" name="ingredients_disponibles" placeholder="Ingrédients disponibles" class="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full">
                     </div>
-                {% endfor %}
-            {% endif %}
 
-            
-        </div>
-        <div class="chatbot-container">
-            <div class="title-chatbot">
-                <h2 class="">Parler à un Assistant Cuisinier</h2>
+                    <div class="flex justify-end mt-4 mb-5">
+                        <input type="submit" value="Chercher une recette" class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2 transition duration-300 ease-in-out w-full sm:w-auto">
+                    </div>
+                    
+                </form>
             </div>
 
-            <div id="chat-messages" class="border border-gray-300 rounded-md p-4 max-h-64 overflow-y-auto"></div>
-            <div id="chat-input-container" class="flex mt-4">
-                <input id="user-input" type="text" placeholder="Posez votre question..." class="w-3/4 py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-indigo-600">
-                <button id="send-button" class="w-1/4 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-r-md focus:outline-none hover:bg-indigo-700">Envoyer</button>
+            <div id="resultat" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <!-- Loader -->
+                <div id="loader" class="w-full col-span-2 text-center mb-4">
+                    <div class="inline-block animate-spin ease duration-300 rounded-full h-12 w-12 border-t-4 border-b-4 border-gray-900"></div>
+                </div>
+
+                {% if recettes %}
+                    {% for recette in recettes %}
+                        <div class="recipe-item bg-white shadow-md rounded-md transform transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
+                            <div class="recipe-item-image">
+                                <img src="{{ url_for('static', filename='img/test.gif') }}" alt="image de la recette">
+                            </div>
+                            <div class="p-4">
+                                <div>
+                                    <a href="/recettes/{{ recette['titre'] }}" class="text-blue-500 hover:underline font-bold text-xl mb-2 block">{{ recette['titre'] }}</a>
+                                </div>
+                                <div>
+                                    <p class="text-gray-700">{{ recette['description'] }}</p>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                
             </div>
-            <div class="chatbot-loader text-center mt-4" id="chatbot-loader" style="display: none;">
-                <img src="loader.gif" alt="Chargement...">
+            <div class="chatbot-container">
+                <div class="title-chatbot">
+                    <h2 class="">Parler à un Assistant Cuisinier</h2>
+                </div>
+
+                <div id="chat-messages" class="border border-gray-300 rounded-md p-4 max-h-64 overflow-y-auto"></div>
+                <div id="chat-input-container" class="flex mt-4">
+                    <input id="user-input" type="text" placeholder="Posez votre question..." class="w-3/4 py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-indigo-600">
+                    <button id="send-button" class="w-1/4 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-r-md focus:outline-none hover:bg-indigo-700">Envoyer</button>
+                </div>
+                <div class="chatbot-loader text-center mt-4" id="chatbot-loader" style="display: none;">
+                    <img src="loader.gif" alt="Chargement...">
+                </div>
             </div>
         </div>
     </div>
