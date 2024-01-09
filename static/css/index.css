@@ -1,3 +1,16 @@
+.main-page-container{
+    max-width: 85%;
+}
+
+.main-page-background{
+    background: linear-gradient(to bottom, white 50%, rgba(229,231,235, 1) 50%);
+}
+
+.recipe-item .recipe-item-image img{
+    width: 100%;
+    height: 150px;
+}
+
 .container-detail{
     margin: 5%;
 
