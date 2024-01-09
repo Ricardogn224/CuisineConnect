@@ -4,6 +4,7 @@
     <title>Recettes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <style>
         /* Ajout de styles personnalisés */
         @keyframes fadeIn {
@@ -76,7 +77,7 @@
                 $('#user-input').val('');
                 
                 $('#chat-messages').css( "display", "block" );
-                
+
                 $('#chat-messages').append('<div class="user-message bg-gray-200 rounded-md p-2 my-1">' + userMessage + '</div>');
                 $('#chatbot-loader').show();
                 
