@@ -62,7 +62,7 @@
     /* Ajoutez d'autres styles ici si nécessaire */
 }
 
-.home .background-image-home{
+.background-image-home{
     background-image: url('../img/image-page-d-accueil.png'); /* Chemin relatif vers l'image de fond */
     background-size: cover;
     background-repeat: no-repeat;

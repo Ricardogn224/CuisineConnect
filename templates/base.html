@@ -21,7 +21,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-200">
+<body class="{{ body_class | default('bg-gray-200') }}">
     <header class="top-0 left-0 right-0 h-20 bg-black text-white flex items-center justify-between px-4 z-10">
         <!-- Section Menu -->
         <div class="header-content flex items-center ml-8">
