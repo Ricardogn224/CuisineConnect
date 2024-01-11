@@ -12,13 +12,60 @@
 }
 
 .container-detail{
-    margin: 5%;
+    margin: 1%;
 
 }
 
 .container-detail .text-container-detail{
-    min-width: 70%;
+    min-width: 100%;
 }
+
+.text-container-detail .h2-text{
+    font-size: 1.5em;
+    font-weight: bold;
+    color: orange;
+}
+
+
+.recipe-detail-main-container{
+    width: 100%;
+    display: flex;
+    padding-bottom: 5%;
+    border-bottom: 1px solid grey;
+
+}
+
+.recipe-detail-main-container .ingredients-container{
+    width: 30%;
+    padding-right: 10px;
+}
+
+.recipe-detail-main-container .instrutions-container{
+    width: 70%;
+    background-color: #e4ddd4; 
+    padding-left: 15px;
+    padding-right: 20px;
+}
+
+.recipe-detail-main-container .instrutions-container .title-container{
+    margin: 10px 0;
+}
+
+.recipe-detail-main-container .ingredients-container .title-container{
+    margin-bottom: 15px 0;
+}
+
+.recipe-detail-main-container .ingredients-content{
+    display: flex;
+    flex-direction: column;
+    padding-right: 10%;
+}
+
+.recipe-detail-main-container .ingredients-content .ingredients-item{
+    border-bottom: 1px solid grey;
+    padding: 10px 0;
+}
+
 
 .back-button-container{
     display: flex;
