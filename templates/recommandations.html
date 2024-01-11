@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Détail de la recette
+{% endblock %}
+
+{% block content %}
+    <div class="container-detail flex items-center justify-center">
+        <div class="text-container-detail rounded-lg p-8 w-full max-w-md">
+
+            <div class="detail-container-title flex items-center justify-center">
+                <h1 class="text-3xl font-bold mb-3">Recommandations</h1>
+            </div>
+
+            <div id="resultat" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
+                <!-- Loader -->
+                <!-- <div id="loader" class="w-full col-span-2 text-center mb-4">
+                    <div class="inline-block animate-spin ease duration-300 rounded-full h-12 w-12 border-t-4 border-b-4 border-gray-900"></div>
+                </div> -->
+
+                {% if recettes %}
+                    {% for recette in recettes %}
+                        <div class="recipe-item bg-white shadow-md rounded-md transform transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
+                            <div class="recipe-item-image">
+                                <img src="{{ url_for('static', filename='img/test.gif') }}" alt="image de la recette">
+                            </div>
+                            <div class="p-4">
+                                <div>
+                                    <a href="#" class="text-blue-500 hover:underline font-bold text-xl mb-2 block">{{ recette['titre'] }}</a>
+                                </div>
+                                <div>
+                                    <p class="text-gray-700">{{ recette['description'] }}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(function() {
+                var userMessage = $('#user-input').val();
+                $('#user-input').val('');
+
+                $('#chat-messages').css( "display", "block" );
+
+                $('#chat-messages').append('<div class="user-message bg-gray-200 rounded-md p-2 my-1">' + userMessage + '</div>');
+                $('#chatbot-loader').show();
+
+                $.post('/ask', { question: userMessage }, function(data) {
+                    var botResponse = data.result;
+                    $('#chat-messages').append('<div class="agent-message bg-indigo-600 text-white rounded-md p-2 my-1">' + botResponse + '</div>');
+                    $('#chatbot-loader').hide();
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

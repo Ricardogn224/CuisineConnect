@@ -145,6 +145,37 @@ def recette_detail(nom_recete):
     # Afficher la page de détail de la recette
     return render_template("recette_detail.html", nom_recete=nom_recete, recette=recette)
 
+@app.route("/recettes/<nom_recete>/recommandations", methods=["GET", "POST"]) 
+@login_required
+def recommandations(nom_recete):
+    # # Afficher la liste des recettes africaines
+    # recettes = get_recipes(5)
+    # # Si la liste est vide, on réessaye
+    # while recettes == []:
+    #     recettes = get_recipes(5)
+    #
+    # print("recipes on page recettes :", recettes)
+    # Afficher la liste des recettes africaines
+    recettes = openai.Completion.create(
+        engine="gpt-3.5-turbo-instruct",
+        prompt=f"Proposes 5 recettes qui proviennent de la même région que le {nom_recete} ou qui contiennent plus ou moins les mêmes ingrédients que le {nom_recete}. Chaque recette doit être au format JSON avec les clés : titre, type, description, nombre de personnes, et ingrédients. Les clés doivent être en minuscules. Veuillez fournir une liste contenant 5 dictionnaires représentant les recettes, sans texte supplémentaire avant ou après la liste. ",
+        max_tokens=2000
+    )
+
+    recettes = recettes.choices[0].text.strip()
+    # list to json
+
+    print(str(recettes))
+
+    try:
+        recettes = json.loads(recettes)
+    except:
+        recettes = []
+
+    print("list:", recettes)
+
+    return render_template("recommandations.html", recettes=recettes)
+
 
 @app.route('/ask', methods=['POST', 'GET'])
 @login_required
