@@ -6,10 +6,63 @@ Détail de la recette
 
 {% block content %}
     <div class="container-detail flex items-center justify-center">
-        <div class="text-container-detail bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+        <div class="text-container-detail rounded-lg p-8 w-full max-w-md">
 
-            <h1 class="text-3xl font-bold mb-6 text-center text-indigo-600">Détail de la recette</h1>
-            <h2 class="text-xl font-bold mb-2 text-indigo-600">{{nom_recete}}</h2>
+            <div class="detail-container-title flex items-center justify-center">
+                <h1 class="text-3xl font-bold mb-3">Recette du {{ nom_recete }}</h1>
+            </div>
+
+            <div class="config-recipe-container flex items-center justify-center">
+                <div class="config-item m-3 border-r-2 border-solid border-black px-5">
+                    <p>
+                        3 personnes
+                    </p>
+                </div>
+                <div class="config-item m-3 px-5">
+                    <p>
+                        45 minutes
+                    </p>
+                </div>
+            </div>
+
+            <div class="history-recipe mb-5">
+                <div class="title-history-recipe mt-10 mb-3">
+                    <h2 class="text-orange-300 h2-text">La petite histoire</h2>
+                </div>
+                <div class="text-content-history">
+                    <p>IUIOUUUUUUUUUUOU</p>
+                </div>
+            </div>
+
+            <div class="recipe-detail-main-container">
+                <div class="ingredients-container">
+                    <div class="title-container">
+                        <h2 class="h2-text">Ingrédients</h2>
+                    </div>
+                    <div class="ingredients-content">
+                        <div class="ingredients-item">
+                            <p>3 possions frais</p>
+                        </div>
+                        <div class="ingredients-item">
+                            <p>3 tasses de gari</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="instrutions-container">
+                    <div class="title-container">
+                        <h2 class="h2-text">Instructions</h2>
+                    </div>
+                    <div class="instructions-content">
+                        <div class="instructions-item">
+                            <p>1. Préparation du dakouin</p>
+                        </div>
+                        <div class="instructions-item">
+                            <p>2. Pendant que le poisson est au repos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <p class="text-lg text-gray-700">{{ recette }}</p>
 
