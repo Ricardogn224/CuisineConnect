@@ -80,13 +80,7 @@ def get_recipe_form(type_recette, nombre_personnes, ingredients_disponibles):
 #     return render_template("recettes.html", recettes=recettes)
 
 @app.route("/")
-@login_required  # Afficher la liste des recettes africaines
-    # recettes = get_recipes(5)
-    # Si la liste est vide, on réessaye
-    # while recettes == []:
-    #     recettes = get_recipes(5)
-    #
-    # print("recipes o
+@login_required  
 def index():
     # # Afficher la liste des recettes africaines
     # recettes = get_recipes(5)
@@ -187,7 +181,7 @@ def inscription():
         print('insertion ok')
         return render_template('recettes.html')
     else:
-        return render_template('connexion.html')
+        return render_template('inscription.html')
     
 
 

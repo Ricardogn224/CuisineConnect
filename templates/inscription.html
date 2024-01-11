@@ -1,11 +1,78 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Formulaire</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h2>Formulaire</h2>
+{% block title %}
+Formulaire
+{% endblock %}
+
+{% set body_class = "background-connexion" %}
+
+
+{% block content %}
+
+    <div class="w-full mx-auto mt-40">
+        <div class="flex items-center justify-center bg-white p-6">
+            <a href="/connexion" class="focus:outline-none pr-5 title-no-active title-login-register">SE CONNECTER</a>
+            <a href="/inscription" class="focus:outline-none title-login-register">S'INSCRIRE</a>
+        </div>
+
+        <div class="flex items-center justify-center p-6">
+            <div class="w-full p-8 bg-white rounded-lg shadow-md" style="width: 800px;">
+                <h1 class="text-3xl font-bold text-left text-gray-800 mb-8">Premier pas</h1>
+                <h2>Inscrivez-vous pour découvrir toutes nos recettes</h2>
+                <form method="POST" action="/connexion" class="space-y-6 mt-6">
+                    <div>
+                        <label for="email" class="text-sm font-medium text-gray-700 block mb-2">Email *</label>
+                        <input name="email" id="email" type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                      <label for="pseudonyme" class="text-sm font-medium text-gray-700 block mb-2">Pseudonyme *</label>
+                      <input name="pseudonyme" id="pseudonyme" type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+        
+                    <div>
+                        <label for="date_naissance" class="text-sm font-medium text-gray-700 block mb-2">Date de naissance</label>
+                        <input name="date_naissance" id="date_naissance" type="date" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+        
+                    <div>
+                      <label for="password" class="text-sm font-medium text-gray-700 block mb-2">Mot de passe</label>
+                      <input name="password" id="password" type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label for="remember" class="flex items-center text-sm text-gray-600">
+                                <input id="remember" type="checkbox" name="remember" class="h-4 w-4 border-gray-300 rounded mr-2">
+                                Se souvenir de moi
+                            </label>
+                        </div>
+        
+                        <div>
+                            <a href="#" class="text-sm text-blue-600 hover:underline">Mot de passe oublié ?</a>
+                        </div>
+                    </div>
+        
+                    <div class="mt-6">
+                        <button type="submit" style="background-color: #E67E30;" class="w-full bg-[#E67E30] text-white px-4 py-2 rounded-md hover:bg-[#cc6d2b] focus:outline-none focus:ring-2 focus:ring-[#E67E30] focus:ring-opacity-50">
+                            Connexion
+                        </button>
+                    </div>
+        
+                    <p class="text-xs text-center text-gray-600 mt-6">
+                        En vous connectant, vous acceptez les <a href="#" class="text-blue-600 hover:underline">conditions d’utilisation</a>, la <a href="#" class="text-blue-600 hover:underline">politique de confidentialité</a>, les <a href="#" class="text-blue-600 hover:underline">conditions générales de ventes</a> et les <a href="#" class="text-blue-600 hover:underline">cookies</a>.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+        
+        
+        
+        
+        
+        
+        
+        
 
 <form action="/inscription" method="post">
   <div>

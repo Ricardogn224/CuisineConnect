@@ -1,82 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+{% extends 'base.html' %}
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/metro-logo.svg') }}" type="image/x-icon">
-    <title>Connexion</title>
-</head>
-<body>
-    <main>
-        <section class="l-flex">
-            <!-- header-->
-            <section class=" flex-center bg-blue computer p-w-35">
-                <div class="flex-center ">
-                    <div class="p-20">
-                        <div class=" flex-center mb-30">
-                            <img class="logo" src="{{ url_for('static', filename='images/metro-logo.svg') }}" alt="">
-                        </div>
+{% block title %}
+Connexion
+{% endblock %}
 
-                        <div class="flex flex-center">
-                        
-                                <div><a href=""><img  class="mr-30 social-logo" src="{{ url_for('static', filename='images/Icone-linkedin.svg') }}"  alt="linkedin"></a></div>
-                                <div><a href=""><img  class="social-logo" src="{{ url_for('static', filename='images/Icone-facebook-square.svg') }}"  alt="facebook"></a></div>
-                            
-                        </div>
+{% set body_class = "background-connexion" %}
+
+
+{% block content %}
+
+    <div class="w-full mx-auto mt-40">
+        <div class="flex items-center justify-center bg-white p-6">
+            <a href="/connexion"  class="focus:outline-none pr-5 title-login-register">SE CONNECTER</a>
+            <a href="/inscription"  class="focus:outline-none title-no-active title-login-register">S'INSCRIRE</a>
+        </div>
+
+        <div class="flex items-center justify-center p-6">
+            <div class="w-full p-8 bg-white rounded-lg shadow-md" style="width: 600px; height: 600px;">
+                <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Connectez-vous à votre compte</h1>
+                <form method="POST" action="/connexion" class="space-y-6">
+                    <div>
+                        <label for="email" class="text-sm font-medium text-gray-700 block mb-2">Adresse mail ou Pseudonyme</label>
+                        <input name="email" id="email" type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                </div>
-
-            </section>
-            <!-- header-->
-
-            <!-- Connexion-->
-            <section class="p-w-65">
-
-            <div class="position">
-
-                <h1 class="mb-30">Bienvenue </h1>
-
-                <form method="POST" action="/connexion">
-                    <div class="flex flex-column mb-30">
-                        <label for="" class="mb-10">email</label>
-                        <input name="email" class="input-form" type="text">
+        
+                    <div>
+                        <label for="password" class="text-sm font-medium text-gray-700 block mb-2">Mot de passe</label>
+                        <input name="password" id="password" type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
-
-                    <div class="flex flex-column mb-30">
-                        <label for="" class="mb-10 ">password</label>
-                        <input name="password" type="text" class="input-form">
-                    </div>
-
-                    <div class="flex space-between">
-                        <div class="">
-                            <input type="checkbox" name="remenber" id="" value="true"> <label for="">Se souvenir de moi</label>
-                        </div>
-
+        
+                    <div class="flex items-center justify-between">
                         <div>
-                            <a href="http://"><i> Mot de passe oublié ?</i></a>
+                            <label for="remember" class="flex items-center text-sm text-gray-600">
+                                <input id="remember" type="checkbox" name="remember" class="h-4 w-4 border-gray-300 rounded mr-2">
+                                Se souvenir de moi
+                            </label>
+                        </div>
+        
+                        <div>
+                            <a href="#" class="text-sm text-blue-600 hover:underline">Mot de passe oublié ?</a>
                         </div>
                     </div>
-
-                    <div class="flex-center flex-column mt-20 ">
-                        <input type="submit" value="CONNEXION" class="btn-submit bg-blue">
-
-                        <p>En vous connectant, vous acceptez les <a href="">conditions d’utilisation</a>, la <a href="http://"> politique de confidentialité </a>, les <a href="http://"> conditions générales de ventes</a> et les <a href="http://">cookies</a> .</p>
+        
+                    <div class="mt-6">
+                        <button type="submit" style="background-color: #E67E30;" class="w-full bg-[#E67E30] text-white px-4 py-2 rounded-md hover:bg-[#cc6d2b] focus:outline-none focus:ring-2 focus:ring-[#E67E30] focus:ring-opacity-50">
+                            Connexion
+                        </button>
                     </div>
-
+        
+                    <p class="text-xs text-center text-gray-600 mt-6">
+                        En vous connectant, vous acceptez les <a href="#" class="text-blue-600 hover:underline">conditions d’utilisation</a>, la <a href="#" class="text-blue-600 hover:underline">politique de confidentialité</a>, les <a href="#" class="text-blue-600 hover:underline">conditions générales de ventes</a> et les <a href="#" class="text-blue-600 hover:underline">cookies</a>.
+                    </p>
                 </form>
-
             </div>
-
-            </section>
-            <!-- Connexion-->
-        </section>
-    </main>
-    
-</body>
-</html>
+        </div>
+    </div>
+{% endblock %}
+        
+        
+        
+        
+        
+        
+        
+        
