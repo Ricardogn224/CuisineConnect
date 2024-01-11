@@ -9,23 +9,23 @@ Détail de la recette
         <div class="text-container-detail rounded-lg p-8 w-full max-w-md">
 
             <div class="detail-container-title flex items-center justify-center">
-                <h1 class="text-3xl font-bold mb-3">Recette du {{ nom_recete }}</h1>
+                <h1 class="text-3xl font-bold mb-3">Recette du {{ recette['titre'] }}</h1>
             </div>
 
             <div class="config-recipe-container flex items-center justify-center">
                 <div class="config-item m-3 border-r-2 border-solid border-black px-5">
                     <p>
-                        3 personnes
+                        {{ recette['nombre_personnes'] }}
                     </p>
                 </div>
                 <div class="config-item m-3 px-5">
                     <p>
-                        45 minutes
+                        {{ recette['temps_cuisson'] }}
                     </p>
                 </div>
             </div>
 
-            <div class="history-recipe mb-5">
+            <div class="history-recipe mb-5 hidden">
                 <div class="title-history-recipe mt-10 mb-3">
                     <h2 class="text-orange-300 h2-text">La petite histoire</h2>
                 </div>
@@ -40,12 +40,11 @@ Détail de la recette
                         <h2 class="h2-text">Ingrédients</h2>
                     </div>
                     <div class="ingredients-content">
-                        <div class="ingredients-item">
-                            <p>3 possions frais</p>
-                        </div>
-                        <div class="ingredients-item">
-                            <p>3 tasses de gari</p>
-                        </div>
+                        {% for ingredient in recette['ingredients'] %}
+                            <div class="ingredients-item">
+                                <p>{{ ingredient }}</p>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="instrutions-container">
@@ -53,18 +52,31 @@ Détail de la recette
                         <h2 class="h2-text">Instructions</h2>
                     </div>
                     <div class="instructions-content">
-                        <div class="instructions-item">
-                            <p>1. Préparation du dakouin</p>
-                        </div>
-                        <div class="instructions-item">
-                            <p>2. Pendant que le poisson est au repos</p>
-                        </div>
+                        {% for etape in recette['etapes'] %}
+                            <div class="instructions-item">
+                                <p>{{ loop.index }}. {{ etape }}</p>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
 
 
-            <p class="text-lg text-gray-700">{{ recette }}</p>
+            
+
+            <div>
+                <div class="back-button-container generate-accompagnements">
+                    <a href="#" class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg">Accompagnements pour la recette</a>
+                    
+                </div>
+
+                <p class="invisible">{{ nom_recete }}</p>
+
+                <div class="accompagnements-container">
+                    <p>TEstttttt</p>
+                </div>
+            </div>
+            
 
             <div class="back-button-container">
                 <a href="/recettes/{{ nom_recete }}/recommandations" class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg">Voir les recommandations</a>
@@ -100,6 +112,15 @@ Détail de la recette
 
                 $('#chat-messages').append('<div class="user-message bg-gray-200 rounded-md p-2 my-1">' + userMessage + '</div>');
                 $('#chatbot-loader').show();
+
+                $.post('/ask', { question: userMessage }, function(data) {
+                    var botResponse = data.result;
+                    $('#chat-messages').append('<div class="agent-message bg-indigo-600 text-white rounded-md p-2 my-1">' + botResponse + '</div>');
+                    $('#chatbot-loader').hide();
+                });
+            });
+
+            $('.generate-accompagnements').click(function() {
 
                 $.post('/ask', { question: userMessage }, function(data) {
                     var botResponse = data.result;

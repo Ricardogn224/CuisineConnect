@@ -136,11 +136,17 @@ def recette_detail(nom_recete):
     # Afficher la liste des recettes africaines
     recette = openai.Completion.create(
         engine="gpt-3.5-turbo-instruct",
-        prompt=f"Explique moi comment faire la recette : {nom_recete} peux tu me repondre en francais s'il te plait !, rajoute moi le temps de cuisson entre les Etapes, parle moi en français s'il te plait !  ",
+        prompt=f"Expliques comment faire la recette : {nom_recete} réponds en francais stp ! La recette au format JSON avec les clés : titre, nombres_personnes, ingredients, temps_cuisson, etapes. Les clés en minuscules, avec temps_cuisson contenant juste le temps total de cuisson. La réponse est une liste contenu dans un dictionnaire représentant la recette, sans texte avant ou après la liste.",
         max_tokens=4000
     )
 
     recette = recette.choices[0].text.strip()
+        # list to json
+
+    try:
+        recette = json.loads(recette)
+    except:
+        recette = []
 
     # Afficher la page de détail de la recette
     return render_template("recette_detail.html", nom_recete=nom_recete, recette=recette)
