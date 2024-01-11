@@ -39,6 +39,23 @@ CREATE TABLE IF NOT EXISTS recettes_favoris (
     FOREIGN KEY (id_recette) REFERENCES recettes(id_recette)
 );
 
+CREATE TABLE IF NOT EXISTS recettes_notes (
+    id_note INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_utilisateur INTEGER NOT NULL,
+    id_recette INTEGER NOT NULL,
+    note INTEGER NOT NULL,
+    FOREIGN KEY (id_utilisateur) REFERENCES users(id),
+    FOREIGN KEY (id_recette) REFERENCES recettes(id_recette)
+);
+
+CREATE TABLE IF NOT EXISTS recettes_commentaires (
+    id_commentaire INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_utilisateur INTEGER NOT NULL,
+    id_recette INTEGER NOT NULL,
+    FOREIGN KEY (id_utilisateur) REFERENCES users(id),
+    FOREIGN KEY (id_recette) REFERENCES recettes(id_recette)
+);
+
 CREATE TABLE IF NOT EXISTS preferences_utilisateur (
     id_preference INTEGER PRIMARY KEY AUTOINCREMENT,
     id_utilisateur INTEGER NOT NULL,
@@ -124,6 +141,16 @@ INSERT INTO ingredients (nom_ingredient, quantite, unite_mesure, id_recette) VAL
 
 INSERT INTO recettes_favoris (id_utilisateur, id_recette) VALUES
 (1, 1),
+(1, 2),
+(2, 3),
+(2, 4),
+(3, 5),
+(3, 6),
+(4, 7),
+(4, 8);
+
+INSERT INTO recettes_favoris (id_utilisateur, id_recette) VALUES
+(1, 10),
 (1, 2),
 (2, 3),
 (2, 4),
