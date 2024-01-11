@@ -7,16 +7,20 @@ from langchain.chains import create_sql_query_chain
 from langchain_openai import ChatOpenAI
 
 dotenv.load_dotenv()
+def get_recipe_form(recette) :
+    json_prompt = PromptTemplate.from_template(
+        "Return a JSON object with an `answer` key that answers the following question: {question}"
+    )
 
-json_prompt = PromptTemplate.from_template(
-    "Return a JSON object with an `answer` key that answers the following question: {question}"
-)
+    db = SQLDatabase.from_uri("sqlite:///database.db")
+    llm = OpenAI()
 
-db = SQLDatabase.from_uri("sqlite:///database.db")
-llm = OpenAI()
+    chain = create_sql_query_chain(ChatOpenAI(temperature=0), db)
+    response = chain.invoke({"question": "Donne moi l'id des recette ou le nom de {recette} est dans le titre de la recette ou dans la description de la recette, ma table s'appelle recettes."})
 
-chain = create_sql_query_chain(ChatOpenAI(temperature=0), db)
-response = chain.invoke({"question": "Donne moi l'id des recettes ou le nom de coucous est dans le titre de la recette ou dans la description de la recette."})
-#print(response)
+    print(db.run(response))
+    return (db.run(response))
 
-print(db.run(response))
+print(get_recipe_form("Mafé"))
+
+

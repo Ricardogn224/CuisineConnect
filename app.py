@@ -96,7 +96,7 @@ def index():
 def recettes():
     # Récupérer les paramètres de la requête
     if request.method == "POST":
-        type_recette = request.form["type_recette"]
+        type_recette = request.form["nom_recette"]
         nombre_personnes = request.form["nombre_personnes"]
         ingredients_disponibles = request.form["ingredients_disponibles"]
 
