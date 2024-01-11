@@ -53,5 +53,84 @@
     {% block content %}
     {% endblock %}
 
+    <div id="chatbot-button" class="fixed bottom-4 right-4 flex justify-center items-center w-16 h-16 bg-blue-500 text-white rounded-full cursor-pointer shadow-lg hover:bg-blue-600 transition-colors">
+        <span>💬</span>
+    </div>
+
+    <!-- Fenêtre de chatbot -->
+<div id="chatbot-window" class="fixed bottom-20 right-4 w-72 h-96 bg-white rounded-lg shadow-lg p-4 flex flex-col hidden">
+    <!-- Zone de messages -->
+    <div id="chatbot-messages" class="flex-1 overflow-y-auto p-2 space-y-2">
+        <!-- Message de l'utilisateur -->
+        <div class="chat-message user-message bg-blue-100 rounded p-2 text-sm text-blue-900">
+            Bonjour, j'ai besoin d'aide pour ma commande.
+        </div>
+        <!-- Message du chatbot -->
+        <div class="chat-message chatbot-message bg-gray-100 rounded p-2 text-sm text-gray-800">
+            Bien sûr, je suis là pour vous aider ! Pouvez-vous me donner le numéro de votre commande ?
+        </div>
+        <!-- Autres messages fictifs -->
+        <!-- ... -->
+    </div>
+    <!-- Zone de saisie -->
+    <div class="mt-2">
+        <input type="text" id="chatbot-input" placeholder="Écrivez votre message ici..." class="border rounded w-full p-2 text-sm"/>
+        <button id="chatbot-send" class="w-full bg-blue-500 text-white mt-2 rounded p-2">
+            Envoyer
+        </button>
+    </div>
+</div>
+
+<script>
+    // Obtenir les éléments
+    var chatbotButton = document.getElementById('chatbot-button');
+    var chatbotWindow = document.getElementById('chatbot-window');
+    var chatbotSendButton = document.getElementById('chatbot-send');
+    var chatbotInput = document.getElementById('chatbot-input');
+    var chatbotMessages = document.getElementById('chatbot-messages');
+
+    // Fonction pour basculer l'affichage de la fenêtre de chatbot
+    function toggleChatbot() {
+        chatbotWindow.classList.toggle('hidden');
+    }
+
+    // Fonction pour simuler l'envoi d'un message
+    function sendChatMessage() {
+        var messageText = chatbotInput.value.trim();
+        if(messageText) {
+            // Ajouter un nouveau message utilisateur
+            var userMessageDiv = document.createElement('div');
+            userMessageDiv.classList.add('chat-message', 'user-message', 'bg-blue-100', 'rounded', 'p-2', 'text-sm', 'text-blue-900');
+            userMessageDiv.textContent = messageText;
+            chatbotMessages.appendChild(userMessageDiv);
+
+            // Réinitialiser l'entrée
+            chatbotInput.value = '';
+
+            // Faire défiler vers le nouveau message
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            // Ajouter une réponse fictive du chatbot après un délai
+            setTimeout(() => {
+                var botMessageDiv = document.createElement('div');
+                botMessageDiv.classList.add('chat-message', 'chatbot-message', 'bg-gray-100', 'rounded', 'p-2', 'text-sm', 'text-gray-800');
+                botMessageDiv.textContent = "Ceci est une réponse automatisée à votre message.";
+                chatbotMessages.appendChild(botMessageDiv);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }, 1000);
+        }
+    }
+
+    // Écouteurs d'événements
+    chatbotButton.addEventListener('click', toggleChatbot);
+    chatbotSendButton.addEventListener('click', sendChatMessage);
+    chatbotInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendChatMessage();
+        }
+    });
+</script>
+
+
 </body>
 </html>
