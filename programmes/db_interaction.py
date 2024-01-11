@@ -17,7 +17,18 @@ def get_user(email, password):
     res = conn.execute('SELECT * FROM users WHERE email = ? AND password = ?',(email, password)).fetchone()
     conn.commit()
     conn.close()
-  
-    if res is None:
-        abort(404)
+    
+def get_recipes(recipe_ids):
+    conn = get_db_connection()
+    query = 'SELECT * FROM recettes WHERE id IN ({})'.format(','.join('?' for _ in recipe_ids))
+    res = conn.execute(query, recipe_ids).fetchall()
+    if not res:
+        return []
+    return res
+
+def get_all_recipes_name () :
+    conn = get_db_connection()
+    res = conn.execute('SELECT titre FROM recettes').fetchall()
+    conn.commit()
+    conn.close()
     return res

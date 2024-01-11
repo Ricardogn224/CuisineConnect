@@ -7,6 +7,8 @@ import os
 from functools import wraps
 from flask import session, redirect, url_for
 from flask_session import Session
+import programmes.ask_db as ask_db
+from googlesearch import search
 
 def login_required(f):
     @wraps(f)
@@ -15,6 +17,43 @@ def login_required(f):
             return redirect(url_for('connexion'))
         return f(*args, **kwargs)
     return decorated_function
+
+def extract_numbers(input_list):
+    # Check if the input list is not empty
+    if input_list:
+        numbers = []
+        # Iterate through each tuple in the list
+        for tpl in input_list:
+            # Check if the tuple contains exactly one element
+            if isinstance(tpl, tuple) and len(tpl) == 1:
+                # Append the number inside the tuple to the result list
+                numbers.append(tpl[0])
+            else:
+                # Handle the case where a tuple doesn't meet the criteria
+                print(f"Skipping invalid tuple: {tpl}")
+
+        return numbers
+    else:
+        # Return an error message or handle the case accordingly
+        return "Invalid input"
+
+def get_recipe_image_link(query):
+    try:
+        search_result = search(query + " recipe", num_results=1)
+        return next(search_result)
+    except StopIteration:
+        return None
+
+def update_json_with_image_links(recipes):
+    for recipe in recipes:
+        query = f"{recipe['titre']} dish"
+        image_link = get_recipe_image_link(query)
+        if image_link:
+            recipe['image_link'] = image_link
+        else:
+            recipe['image_link'] = "No image available"
+
+    return recipes
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -40,6 +79,7 @@ def get_recipes(number):
     )
 
     recettes = recettes.choices[0].text.strip()
+    print("recettes :", recettes)
     # list to json
 
     try:
@@ -100,30 +140,44 @@ def recettes():
         nombre_personnes = request.form["nombre_personnes"]
         ingredients_disponibles = request.form["ingredients_disponibles"]
 
-        recettes = get_recipe_form(type_recette, nombre_personnes,
-                                   ingredients_disponibles)
-        while recettes == []:
-            recettes = get_recipe_form(type_recette, nombre_personnes,
-                                       ingredients_disponibles)
+        # je recupère la recette rechercher si elle est dans ma base de donnée
+        recettes_id = ask_db.get_recipe_form(type_recette, nombre_personnes, ingredients_disponibles)
+        
+        #je recupère la recette dans ma base de donnée
+        recettes = db_inter.get_recipes(extract_numbers(recettes_id))
+        #while recettes == []:
+            #recettes = get_recipe_form(type_recette, nombre_personnes, ingredients_disponibles)
         print("list on page /recette :", recettes)
 
         # Retourner la liste des recettes
         return render_template("recettes.html", recettes=recettes)
     else:
+        
+        recettes = []
+        
+        
         # Afficher la liste des recettes africaines
-        recettes = openai.Completion.create(
-            engine="gpt-3.5-turbo-instruct",
-            prompt=f"Propose 5 recettes de cuisine africaines avec les ingrédients de ton choix. Chaque recette doit être au format JSON avec les clés : titre, type, nombres de personnes, ingredients. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
-            max_tokens=2000
-        )
+        names = db_inter.get_all_recipes_name()
+        print("names list :", names)
+        
+        while recettes == []:
+            recettes = openai.Completion.create(
+                engine="gpt-3.5-turbo-instruct",
+                prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant ces recettes de tel sorte que chaque recette doit être au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
+                max_tokens=2000
+            )
 
-        recettes = recettes.choices[0].text.strip()
-        # list to json
+            recettes = recettes.choices[0].text.strip()
+            # list to json
+            
+            print("avant ",recettes)
 
-        try:
-            recettes = json.loads(recettes)
-        except:
-            recettes = []
+            try:
+                recettes = json.loads(str(recettes))
+            except:
+                recettes = []
+
+        recettes = update_json_with_image_links(recettes)
 
         print("list:", recettes)
         return render_template("recettes.html", recettes=recettes)
