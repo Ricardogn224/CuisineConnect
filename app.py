@@ -199,6 +199,23 @@ def ask_chat():
     else:
         return render_template('index.html')
     
+@app.route('/chat', methods=['POST', 'GET'])
+@login_required
+def chat():
+    if request.method == 'POST':
+        question = request.form['question']
+        # Utilisez l'API GPT-3 pour générer une réponse en fonction de la requête
+        response = openai.Completion.create(
+            engine="gpt-3.5-turbo-instruct",
+            prompt=f"Tu es un chef étoilé au guide michelin ayant une quinzaines d’années d’expérience dans le métier avec plusieurs concours culinaires gagnés à l’internationnal. Tu dois répondre en français. \n\nQ: {question}\nA:",
+            max_tokens=2000
+        )
+        result = response.choices[0].text.strip()
+        return jsonify(result=result)
+    else:
+        return render_template('index.html')
+
+    
 @app.route('/inscription', methods=['POST', 'GET'])	
 def inscription():
     if request.method == 'POST':
