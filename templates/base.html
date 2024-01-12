@@ -81,6 +81,8 @@
     </div>
 </div>
 
+
+
 <script>
     // Obtenir les éléments
     var chatbotButton = document.getElementById('chatbot-button');
@@ -94,10 +96,10 @@
         chatbotWindow.classList.toggle('hidden');
     }
 
-    // Fonction pour simuler l'envoi d'un message
+    // Fonction pour envoyer un message et recevoir une réponse du chatbot
     function sendChatMessage() {
         var messageText = chatbotInput.value.trim();
-        if(messageText) {
+        if (messageText) {
             // Ajouter un nouveau message utilisateur
             var userMessageDiv = document.createElement('div');
             userMessageDiv.classList.add('chat-message', 'user-message', 'bg-blue-100', 'rounded', 'p-2', 'text-sm', 'text-blue-900');
@@ -107,17 +109,26 @@
             // Réinitialiser l'entrée
             chatbotInput.value = '';
 
-            // Faire défiler vers le nouveau message
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-
-            // Ajouter une réponse fictive du chatbot après un délai
-            setTimeout(() => {
+            // Envoyer la requête au serveur
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `question=${encodeURIComponent(messageText)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Afficher la réponse du chatbot
                 var botMessageDiv = document.createElement('div');
                 botMessageDiv.classList.add('chat-message', 'chatbot-message', 'bg-gray-100', 'rounded', 'p-2', 'text-sm', 'text-gray-800');
-                botMessageDiv.textContent = "Ceci est une réponse automatisée à votre message.";
+                botMessageDiv.textContent = data.result;
                 chatbotMessages.appendChild(botMessageDiv);
-                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-            }, 1000);
+            })
+            .catch(error => console.error('Erreur:', error));
+
+            // Faire défiler vers le nouveau message
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
         }
     }
 
@@ -130,6 +141,7 @@
         }
     });
 </script>
+
 
 
 </body>

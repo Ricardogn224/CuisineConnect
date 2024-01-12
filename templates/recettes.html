@@ -34,7 +34,7 @@ Recettes
                     {% for recette in recettes %}
                         <div class="recipe-item bg-white shadow-md rounded-md transform transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
                             <div class="recipe-item-image">
-                                <img src="{{ url_for('static', filename='img/test.gif') }}" alt="image de la recette">
+                                <img src="{{ recette['image_link'] }}" alt="image de la recette">
                             </div>
                             <div class="p-4">
                                 <div>

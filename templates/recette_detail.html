@@ -15,7 +15,7 @@ Détail de la recette
             <div class="config-recipe-container flex items-center justify-center">
                 <div class="config-item m-3 border-r-2 border-solid border-black px-5">
                     <p>
-                        {{ recette['nombre_personnes'] }}
+                        {{ recette['nombre_personnes'] }} personnes
                     </p>
                 </div>
                 <div class="config-item m-3 px-5">
@@ -66,20 +66,35 @@ Détail de la recette
 
             <div>
                 <div class="back-button-container generate-accompagnements">
-                    <a href="#" class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg">Accompagnements pour la recette</a>
+                    <a class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg cursor-pointer">Accompagnements pour la recette</a>
                     
                 </div>
 
-                <p class="invisible">{{ nom_recete }}</p>
-
                 <div class="accompagnements-container">
-                    <p>TEstttttt</p>
                 </div>
+
+                <p class="invisible name-recipe">{{ nom_recete }}</p>
             </div>
             
 
             <div class="back-button-container">
                 <a href="/recettes/{{ nom_recete }}/recommandations" class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg">Voir les recommandations</a>
+            </div>
+
+            <div>
+                <div class="back-button-container generate-liste-courses">
+                    <a class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg cursor-pointer">Récupérer la liste de course</a>
+                    
+                </div>
+
+                <div class="liste-course-container">
+                </div>
+
+                <div class="liste-course-share-container hidden">
+                    <a class="share-button mt-4 block w-full text-center bg-black text-white p-2 rounded-lg cursor-pointer">Partager la liste</a>
+                </div>
+
+                <p class="invisible name-recipe">{{ nom_recete }}</p>
             </div>
 
 
@@ -122,10 +137,46 @@ Détail de la recette
 
             $('.generate-accompagnements').click(function() {
 
-                $.post('/ask', { question: userMessage }, function(data) {
-                    var botResponse = data.result;
-                    $('#chat-messages').append('<div class="agent-message bg-indigo-600 text-white rounded-md p-2 my-1">' + botResponse + '</div>');
-                    $('#chatbot-loader').hide();
+                var nomRecette = $(this).parent().find('.name-recipe').text()
+
+                $.post('/recette/accompagnements', { nom_recette: nomRecette }, function(data) {
+                    var accompagnementsResponse = data.result;
+                    
+                    var jsonAccompagnements = JSON.parse(accompagnementsResponse)
+                    jsonAccompagnements.forEach(function(accompagnement) {
+                        var nom_accompagnement = accompagnement.nom_accompagnement;
+                        $('.accompagnements-container').append('<p class="font-semibold"> - ' + nom_accompagnement + '</p>');
+                    });
+                });
+            });
+
+            $('.generate-liste-courses').click(function() {
+
+            var nomRecette = $(this).parent().find('.name-recipe').text()
+
+                $.post('/recette/liste-course', { nom_recette: nomRecette }, function(data) {
+                    var listeCoursesResponse = data.result;
+
+                    var listCourseArray = [];
+                    
+                    var jsonListCourse = JSON.parse(listeCoursesResponse)
+                    console.log(jsonListCourse)
+                    jsonListCourse.forEach(function(ingredient) {
+                        var nom_ingredient = ingredient.nom_ingredient;
+                        $('.liste-course-container').append('<p class="font-semibold"> - ' + nom_ingredient + '</p>');
+                        listCourseArray.push(nom_ingredient)
+                    });
+
+                    $('.liste-course-share-container').fadeIn();
+
+                    $('.liste-course-share-container').click(function() {
+                        navigator.clipboard
+                        .writeText(listCourseArray.toString())
+                        .then(
+                        (success) => console.log("text copied"),
+                        (err) => console.log("error copying text")
+                        );
+                    });
                 });
             });
         });

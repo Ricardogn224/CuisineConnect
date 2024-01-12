@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS recettes (
     temps_preparation INTEGER,
     image VARCHAR(255),
     id_utilisateur INTEGER NOT NULL,
+    nombre_personnes INTEGER,
+    ingredients_disponibles VARCHAR(255),
     FOREIGN KEY (id_utilisateur) REFERENCES users(id)
 );
 
@@ -66,17 +68,17 @@ CREATE TABLE IF NOT EXISTS preferences_utilisateur (
 
 INSERT INTO users (pseudo, email, password, adresse, telephone) VALUES ('ChefAfricain', 'chefafricain@example.com', 'password123', '123 Rue Afrique', '9876543210');
 
-INSERT INTO recettes (titre, description, instructions, pays, temps_preparation, image, id_utilisateur) VALUES
-('Yassa', 'Poulet Yassa du Sénégal', 'Instructions...', 'Sénégal', 60, 'yassa.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Jollof Rice', 'Riz Jollof', 'Instructions...', 'Nigeria', 50, 'jollof_rice.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Couscous', 'Couscous traditionnel', 'Instructions...', 'Maroc', 90, 'couscous.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Bobotie', 'Bobotie d''Afrique du Sud', 'Instructions...', 'Afrique du Sud', 80, 'bobotie.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Fufu et Soup', 'Fufu et sa soup', 'Instructions...', 'Ghana', 70, 'fufu_soup.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Maafe', 'Maafe', 'Instructions...', 'Mali', 85, 'maafe.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Chapati', 'Chapati kényan', 'Instructions...', 'Kenya', 30, 'chapati.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Injera et Ragoût', 'Injera avec ragoût', 'Instructions...', 'Éthiopie', 90, 'injera_stew.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Mozzarella et Akara', 'Sandwich Mozzarella et Akara', 'Instructions...', 'Nigeria', 45, 'mozzarella_akara.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain')),
-('Bunny Chow', 'Bunny Chow d''Afrique du Sud', 'Instructions...', 'Afrique du Sud', 60, 'bunny_chow.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'));
+INSERT INTO recettes (titre, description, instructions, pays, temps_preparation, image, id_utilisateur, nombre_personnes, ingredients_disponibles) VALUES
+('Yassa', 'Poulet Yassa du Sénégal', 'Instructions...', 'Sénégal', 60, 'yassa.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 4, 'Ingredients for Yassa available'),
+('Jollof Rice', 'Riz Jollof', 'Instructions...', 'Nigeria', 50, 'jollof_rice.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 6, 'Ingredients for Jollof Rice available'),
+('Couscous', 'Couscous traditionnel', 'Instructions...', 'Maroc', 90, 'couscous.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 5, 'Ingredients for Couscous available'),
+('Bobotie', 'Bobotie d''Afrique du Sud', 'Instructions...', 'Afrique du Sud', 80, 'bobotie.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 8, 'Ingredients for Bobotie available'),
+('Fufu et Soup', 'Fufu et sa soup', 'Instructions...', 'Ghana', 70, 'fufu_soup.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 3, 'Ingredients for Fufu and Soup available'),
+('Maafe', 'Maafe', 'Instructions...', 'Mali', 85, 'maafe.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 4, 'Ingredients for Maafe available'),
+('Chapati', 'Chapati kényan', 'Instructions...', 'Kenya', 30, 'chapati.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 2, 'Ingredients for Chapati available'),
+('Injera et Ragoût', 'Injera avec ragoût', 'Instructions...', 'Éthiopie', 90, 'injera_stew.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 4, 'Ingredients for Injera and Stew available'),
+('Mozzarella et Akara', 'Sandwich Mozzarella et Akara', 'Instructions...', 'Nigeria', 45, 'mozzarella_akara.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 2, 'Ingredients for Mozzarella and Akara available'),
+('Bunny Chow', 'Bunny Chow d''Afrique du Sud', 'Instructions...', 'Afrique du Sud', 60, 'bunny_chow.jpg', (SELECT id FROM users WHERE pseudo = 'ChefAfricain'), 3, 'Ingredients for Bunny Chow available');
 
 -- Ingrédients pour la recette Yassa
 INSERT INTO ingredients (nom_ingredient, quantite, unite_mesure, id_recette) VALUES
