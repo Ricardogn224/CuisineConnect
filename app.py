@@ -13,8 +13,8 @@ import json
 
 def extract_json(text):
     try:
-        start_index = text.index('[')
-        end_index = text.index(']')
+        start_index = text.index('[{')
+        end_index = text.index('}]')
         json_str = text[start_index:end_index + 1]
         recipe_json = json.loads(json_str)
         return recipe_json
@@ -294,7 +294,7 @@ def recettes():
         while recettes == []:
             recettes = openai.Completion.create(
                 engine="gpt-3.5-turbo-instruct",
-                prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant ces recettes de tel sorte que chaque recette doit être au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
+                prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant ces recettes de tel sorte que chaque recette doit être au format JSON avec les clés : id, titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
                 max_tokens=2000
             )
 
@@ -324,18 +324,25 @@ def recette_detail(nom_recete):
     while recette == []:
         recette = openai.Completion.create(
             engine="gpt-3.5-turbo-instruct",
-            prompt=f"Expliques comment faire la recette : {nom_recete} . La recette est au format JSON avec les clés : titre, nombres_personnes, ingredients, temps_cuisson, etapes. Les clés en minuscules, avec temps_cuisson contenant juste le temps total de cuisson. Fournir une liste contenant 1 dictionnaire représentant la recette, sans texte supplémentaire avant et après la liste.",
+            prompt=f"Expliques comment faire la recette : {nom_recete} . La recette est au format JSON avec les clés : id, titre, nombres_personnes, ingredients, temps_cuisson, etapes. Les clés en minuscules, avec temps_cuisson contenant juste le temps total de cuisson. Fournir une liste contenant 1 dictionnaire représentant la recette, sans texte supplémentaire avant et après la liste.",
             max_tokens=4000
         )
 
         recette = recette.choices[0].text.strip()
             # list to json
-
-        recette = extract_json(recette)
+        
+        if recette != "":    
+            try:
+                recette = json.loads(recette)
+            except:
+                recette = []
+        else:
+            print("recette gpt :", recette)
+            recette = extract_json(recette)
+            print("extracted json :", recette)
 
         print("apres detail", recette)
-
-    # Afficher la page de détail de la recette
+        
     return render_template("recette_detail.html", nom_recete=nom_recete, recette=recette)
 
 @app.route("/recettes/test", methods=["GET", "POST"])

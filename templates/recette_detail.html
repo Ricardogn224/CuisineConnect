@@ -5,22 +5,23 @@ Détail de la recette
 {% endblock %}
 
 {% block content %}
+
     <div class="container-detail flex items-center justify-center">
         <div class="text-container-detail rounded-lg p-8 w-full max-w-md">
-
+            {% for recipe in recette %}
             <div class="detail-container-title flex items-center justify-center">
-                <h1 class="text-3xl font-bold mb-3">Recette du {{ recette['titre'] }}</h1>
+                <h1 class="text-3xl font-bold mb-3">Recette du {{ recipe['titre'] }}</h1>
             </div>
 
             <div class="config-recipe-container flex items-center justify-center">
                 <div class="config-item m-3 border-r-2 border-solid border-black px-5">
                     <p>
-                        {{ recette['nombres_personnes'] }} personnes
+                        {{ recipe['nombres_personnes'] }} personnes
                     </p>
                 </div>
                 <div class="config-item m-3 px-5">
                     <p>
-                        {{ recette['temps_cuisson'] }}
+                        {{ recipe['temps_cuisson'] }} minutes
                     </p>
                 </div>
             </div>
@@ -40,7 +41,7 @@ Détail de la recette
                         <h2 class="h2-text">Ingrédients</h2>
                     </div>
                     <div class="ingredients-content">
-                        {% for ingredient in recette['ingredients'] %}
+                        {% for ingredient in recipe['ingredients'] %}
                             <div class="ingredients-item">
                                 <p>{{ ingredient }}</p>
                             </div>
@@ -52,7 +53,7 @@ Détail de la recette
                         <h2 class="h2-text">Instructions</h2>
                     </div>
                     <div class="instructions-content">
-                        {% for etape in recette['etapes'] %}
+                        {% for etape in recipe['etapes'] %}
                             <div class="instructions-item">
                                 <p class="p-2 font-semibold">{{ etape }}</p>
                             </div>
@@ -60,6 +61,7 @@ Détail de la recette
                     </div>
                 </div>
             </div>
+            {% endfor %}
 
 
             
