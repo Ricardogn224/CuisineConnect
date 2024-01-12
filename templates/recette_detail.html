@@ -15,7 +15,7 @@ Détail de la recette
             <div class="config-recipe-container flex items-center justify-center">
                 <div class="config-item m-3 border-r-2 border-solid border-black px-5">
                     <p>
-                        {{ recette['nombre_personnes'] }} personnes
+                        {{ recette['nombres_personnes'] }} personnes
                     </p>
                 </div>
                 <div class="config-item m-3 px-5">
@@ -54,7 +54,7 @@ Détail de la recette
                     <div class="instructions-content">
                         {% for etape in recette['etapes'] %}
                             <div class="instructions-item">
-                                <p>{{ loop.index }}. {{ etape }}</p>
+                                <p class="p-2 font-semibold">{{ etape }}</p>
                             </div>
                         {% endfor %}
                     </div>
@@ -84,11 +84,15 @@ Détail de la recette
             <div>
                 <div class="back-button-container generate-liste-courses">
                     <a class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg cursor-pointer">Récupérer la liste de course</a>
-                    
+                </div>
+
+                <div class="test-button-container">
+                    <a class="back-button mt-4 block w-full text-center bg-indigo-600 text-white p-3 rounded-lg cursor-pointer">Récuperer test</a>
                 </div>
 
                 <div class="liste-course-container">
                 </div>
+                
 
                 <div class="liste-course-share-container hidden">
                     <a class="share-button mt-4 block w-full text-center bg-black text-white p-2 rounded-lg cursor-pointer">Partager la liste</a>
@@ -119,6 +123,22 @@ Détail de la recette
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+
+            $('.test-button-container').click(function() {
+                var nomRecet = $(this).parent().find('.name-recipe').text();
+                console.log(nomRecet + "/")
+                $.post('/recettes/test', { nom_recette: nomRecet }, function(data) {
+                    var accompagnementsResponse = data.result;
+
+                    console.log(accompagnementsResponse)
+                    
+                    var jsonAccompagnements = JSON.parse(accompagnementsResponse)
+
+                    console.log(accompagnementsResponse)
+
+                });
+            });
+
             $('#send-button').click(function() {
                 var userMessage = $('#user-input').val();
                 $('#user-input').val('');
@@ -138,6 +158,7 @@ Détail de la recette
             $('.generate-accompagnements').click(function() {
 
                 var nomRecette = $(this).parent().find('.name-recipe').text()
+                console.log(nomRecette)
 
                 $.post('/recette/accompagnements', { nom_recette: nomRecette }, function(data) {
                     var accompagnementsResponse = data.result;
@@ -153,6 +174,7 @@ Détail de la recette
             $('.generate-liste-courses').click(function() {
 
             var nomRecette = $(this).parent().find('.name-recipe').text()
+            console.log(nomRecette)
 
                 $.post('/recette/liste-course', { nom_recette: nomRecette }, function(data) {
                     var listeCoursesResponse = data.result;
