@@ -10,7 +10,7 @@ Détail de la recette
 
             <div class="detail-container-title flex items-center justify-center">
                 <h1 class="text-3xl font-bold mb-3">Recette du {{ nom_recete }}</h1>
-            </div>
+            </div>           
 
             <div class="config-recipe-container flex items-center justify-center">
                 <div class="config-item m-3 border-r-2 border-solid border-black px-5">
@@ -62,6 +62,21 @@ Détail de la recette
             </div>
 
 
+            <form action="{{ url_for('avis') }}" method="post" class="mt-8">
+                <div class="mb-4">
+                    <label for="note" class="block text-gray-700 text-sm font-bold mb-2">Note :</label>
+                    <input type="number" id="note" name="note" min="1" max="5" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <div class="mb-6">
+                    <label for="commentaire" class="block text-gray-700 text-sm font-bold mb-2">Commentaire :</label>
+                    <textarea id="commentaire" name="commentaire" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                </div>
+                <input type="hidden" name="id_recette" value="{{ id_recette }}">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Envoyer</button>
+            </form>
+            
+            <hr>
+
             
 
             <div>
@@ -95,22 +110,6 @@ Détail de la recette
                 </div>
 
                 <p class="invisible name-recipe">{{ nom_recete }}</p>
-            </div>
-
-
-            <div class="chatbot-container">
-                <div class="title-chatbot">
-                    <h2 class="">Parler à un Assistant Cuisinier</h2>
-                </div>
-
-                <div id="chat-messages" class="border border-gray-300 rounded-md p-4 max-h-64 overflow-y-auto"></div>
-                <div id="chat-input-container" class="flex mt-4">
-                    <input id="user-input" type="text" placeholder="Posez votre question..." class="w-3/4 py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-indigo-600">
-                    <button id="send-button" class="w-1/4 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-r-md focus:outline-none hover:bg-indigo-700">Envoyer</button>
-                </div>
-                <div class="chatbot-loader text-center mt-4" id="chatbot-loader" style="display: none;">
-                    <img src="loader.gif" alt="Chargement...">
-                </div>
             </div>
         </div>
 

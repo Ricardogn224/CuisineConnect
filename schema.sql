@@ -54,9 +54,11 @@ CREATE TABLE IF NOT EXISTS recettes_commentaires (
     id_commentaire INTEGER PRIMARY KEY AUTOINCREMENT,
     id_utilisateur INTEGER NOT NULL,
     id_recette INTEGER NOT NULL,
+    nom_ingredient VARCHAR(255),
     FOREIGN KEY (id_utilisateur) REFERENCES users(id),
     FOREIGN KEY (id_recette) REFERENCES recettes(id_recette)
 );
+
 
 CREATE TABLE IF NOT EXISTS preferences_utilisateur (
     id_preference INTEGER PRIMARY KEY AUTOINCREMENT,
