@@ -77,6 +77,14 @@
     width: 30%;
 }
 
+.liste-course-share-container .share-button{
+    width: 15%;
+}
+
+.liste-course-share-container:active {
+    color: rgb(79, 79, 79);
+}
+
 
 .chatbot-container{
     margin: 2% 0;
