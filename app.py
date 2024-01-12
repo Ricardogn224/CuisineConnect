@@ -142,9 +142,6 @@ def recettes():
 
         # je recupère toute les recettes dans ma base de donnée
         names = db_inter.get_all_recipes_name()
-        
-        
-        
         if nom_recette == "" and nombre_personnes == "" and ingredients_disponibles == "":
             recettes = openai.Completion.create(
                 engine="gpt-3.5-turbo-instruct",
@@ -188,15 +185,21 @@ def recettes():
             
             return render_template("recettes.html", recettes=recettes)
         elif nombre_personnes == "" and ingredients_disponibles == "":
-            recettes = openai.Completion.create(
-                engine="gpt-3.5-turbo-instruct",
-                prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant les recettes pour celle qui ont dans leurs titre ou description {nom_recette} de tel sorte que chaque la recette soit au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
-                max_tokens=2000
-            )
+            recettes = []
+            while recettes == []:
+                recettes = openai.Completion.create(
+                    engine="gpt-3.5-turbo-instruct",
+                    prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant les recettes pour celle qui ont dans leurs titre ou description {nom_recette} de tel sorte que chaque la recette soit au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
+                    max_tokens=2000
+                )
 
-            recettes = recettes.choices[0].text.strip()
-            # list to json
-            recettes = json.loads(str(recettes))
+                recettes = recettes.choices[0].text.strip()
+                # list to json
+                try :
+                    recettes = json.loads(str(recettes))
+                except :
+                    recettes = []
+                
             return render_template("recettes.html", recettes=recettes)
         
         elif nom_recette == "":
@@ -219,38 +222,56 @@ def recettes():
             return render_template("recettes.html", recettes=recettes)
         
         elif nombre_personnes == "":
-            recettes = openai.Completion.create(
-                engine="gpt-3.5-turbo-instruct",
-                prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant les recettes pour celle qui ont dans leurs ingrédients {ingredients_disponibles} et qui ont dans leurs titre ou description {nom_recette} de tel sorte que chaque la recette soit au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
-                max_tokens=2000
-            )
-            
-            recettes = recettes.choices[0].text.strip()
-            # list to json
-            recettes = json.loads(str(recettes))
+            recettes = []
+            while recettes == []:
+                recettes = openai.Completion.create(
+                    engine="gpt-3.5-turbo-instruct",
+                    prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant les recettes pour celle qui ont dans leurs ingrédients {ingredients_disponibles} et qui ont dans leurs titre ou description {nom_recette} de tel sorte que chaque la recette soit au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
+                    max_tokens=2000
+                )
+                
+                recettes = recettes.choices[0].text.strip()
+                # list to json
+                try:
+                    recettes = json.loads(str(recettes))
+                except:
+                    recettes = []
             return render_template("recettes.html", recettes=recettes)
         
         elif ingredients_disponibles == "":
-            recettes = openai.Completion.create(
-                engine="gpt-3.5-turbo-instruct",
-                prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant les recettes pour celle qui sont pour {nombre_personnes} personnes et qui ont dans leurs titre ou description {nom_recette} de tel sorte que chaque la recette soit au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
-                max_tokens=2000
-            )
+            recettes = []
             
-            recettes = recettes.choices[0].text.strip()
-            # list to json
-            recettes = json.loads(str(recettes))
+            while recettes == []:
+                recettes = openai.Completion.create(
+                    engine="gpt-3.5-turbo-instruct",
+                    prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant les recettes pour celle qui sont pour {nombre_personnes} personnes et qui ont dans leurs titre ou description {nom_recette} de tel sorte que chaque la recette soit au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste. ",
+                    max_tokens=2000
+                )
+                
+                recettes = recettes.choices[0].text.strip()
+                
+                try:
+                    recettes = json.loads(str(recettes))
+                except:
+                    recettes = []
             return render_template("recettes.html", recettes=recettes)
+        
         if nom_recette  != "" and nombre_personnes != "" and ingredients_disponibles != "":
-            recettes = openai.Completion.create(
-                engine="gpt-3.5-turbo-instruct",
-                prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant les recettes pour celle qui sont pour {nombre_personnes} personnes et qui ont dans leurs ingrédients {ingredients_disponibles} et qui ont dans leurs titre ou description {nom_recette} de tel sorte que chaque la recette soit au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste.",
-                max_tokens=2000
-            )
+            recettes = []
+            while recettes == []:
+                recettes = openai.Completion.create(
+                    engine="gpt-3.5-turbo-instruct",
+                    prompt=f"Voici les noms de recettes africaine :  {names} génère moi les informtions nécéssaires  consernant les recettes pour celle qui sont pour {nombre_personnes} personnes et qui ont dans leurs ingrédients {ingredients_disponibles} et qui ont dans leurs titre ou description {nom_recette} de tel sorte que chaque la recette soit au format JSON avec les clés : titre, type,description, nombres de personnes, ingredients, image_link. Les clés doivent être en minuscules. La réponse attendue doit être une liste contenant 10 dictionnaires représentant les recettes, sans texte avant ou après la liste.",
+                    max_tokens=2000
+                )
 
-            recettes = recettes.choices[0].text.strip()
-            # list to json
-            recettes = json.loads(str(recettes))
+                recettes = recettes.choices[0].text.strip()
+                # list to json
+                try:
+                    recettes = json.loads(str(recettes))
+                except:
+                    recettes = []
+                    
             return render_template("recettes.html", recettes=recettes)
     else:
         
