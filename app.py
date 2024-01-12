@@ -310,7 +310,7 @@ def recette_detail(nom_recete):
     # Afficher la liste des recettes africaines
     recette = openai.Completion.create(
         engine="gpt-3.5-turbo-instruct",
-        prompt=f"Expliques comment faire la recette : {nom_recete} réponds en francais stp ! La recette au format JSON avec les clés : titre, nombres_personnes, ingredients, temps_cuisson, etapes. Les clés en minuscules, avec temps_cuisson contenant juste le temps total de cuisson. La réponse est une liste contenu dans un dictionnaire représentant la recette, sans texte avant ou après la liste.",
+        prompt=f"Expliques comment faire la recette : {nom_recete} réponds en francais stp ! La recette au format JSON avec les clés : titre, nombres_personnes, ingredients, temps_cuisson, etapes. Les clés en minuscules, avec temps_cuisson contenant juste le temps total de cuisson. La réponse est une liste contenu dans un dictionnaire représentant la recette, sans texte avant ou après la liste JSON.",
         max_tokens=4000
     )
 
@@ -370,6 +370,14 @@ def ask_chat():
         )
         result = response.choices[0].text.strip()
         return jsonify(result=result)
+    else:
+        return render_template('index.html')
+    
+@app.route('/avis', methods=['POST', 'GET'])
+@login_required
+def avis():
+    if request.method == 'POST':
+        print("hj")
     else:
         return render_template('index.html')
 
