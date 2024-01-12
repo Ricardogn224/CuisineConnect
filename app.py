@@ -143,6 +143,10 @@ def recettes():
         # je recupère la recette rechercher si elle est dans ma base de donnée
         recettes_id = ask_db.get_recipe_form(type_recette, nombre_personnes, ingredients_disponibles)
         
+        #conversion en json de la requette sql 
+        recettes_id = json.loads(recettes_id)
+        
+        
         #je recupère la recette dans ma base de donnée
         recettes = db_inter.get_recipes(extract_numbers(recettes_id))
         #while recettes == []:
@@ -154,8 +158,6 @@ def recettes():
     else:
         
         recettes = []
-        
-        
         # Afficher la liste des recettes africaines
         names = db_inter.get_all_recipes_name()
         print("names list :", names)
@@ -177,7 +179,7 @@ def recettes():
             except:
                 recettes = []
 
-        recettes = update_json_with_image_links(recettes)
+        #recettes = update_json_with_image_links(recettes)
 
         print("list:", recettes)
         return render_template("recettes.html", recettes=recettes)
