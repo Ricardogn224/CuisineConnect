@@ -198,6 +198,38 @@ def ask_chat():
         return jsonify(result=result)
     else:
         return render_template('index.html')
+
+@app.route('/recette/accompagnements', methods=['POST', 'GET'])
+def get_accompagnements():
+    if request.method == 'POST':
+        nom_recette = request.form['nom_recette']
+        # Utilisez l'API GPT-3 pour générer une réponse en fonction de la requête
+        response = openai.Completion.create(
+            engine="gpt-3.5-turbo-instruct",
+            prompt=f"propose 5 accompagnements pour cette recette : {nom_recette}. Accompagnements sont soît des apéritifs, des boissons ou des desserts. Chaque accompagnement doit être au format JSON avec les clés : nom_accompagnement. Les clés doivent être en minuscules. Fournir une liste contenant 5 dictionnaires représentant les accompagnements, sans texte supplémentaire avant ou après la liste.",
+            max_tokens=2000
+        )
+        result = response.choices[0].text.strip()
+        
+        return jsonify(result=result)
+    else:
+        return render_template('index.html')
+    
+@app.route('/recette/liste-course', methods=['POST', 'GET'])
+def get_liste_course():
+    if request.method == 'POST':
+        nom_recette = request.form['nom_recette']
+        # Utilisez l'API GPT-3 pour générer une réponse en fonction de la requête
+        response = openai.Completion.create(
+            engine="gpt-3.5-turbo-instruct",
+            prompt=f"propose une liste de course des ingrédients afin de réaliser cette recette : {nom_recette}. Chaque accompagnement doit être au format JSON avec les clés : nom_ingredient. Les clés doivent être en minuscules. Fournir une liste contenant 5 dictionnaires représentant les ingredients, sans texte supplémentaire avant ou après la liste.",
+            max_tokens=2000
+        )
+        result = response.choices[0].text.strip()
+        
+        return jsonify(result=result)
+    else:
+        return render_template('index.html')
     
 @app.route('/inscription', methods=['POST', 'GET'])	
 def inscription():
