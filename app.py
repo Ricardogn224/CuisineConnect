@@ -9,6 +9,18 @@ from flask import session, redirect, url_for
 from flask_session import Session
 import programmes.ask_db as ask_db
 from googlesearch import search
+import json
+
+def extract_json(text):
+    try:
+        start_index = text.index('[')
+        end_index = text.index(']')
+        json_str = text[start_index:end_index + 1]
+        recipe_json = json.loads(json_str)
+        return recipe_json
+    except ValueError as e:
+        print(f"Error extracting JSON: {e}")
+        return None
 
 def login_required(f):
     @wraps(f)
@@ -132,7 +144,6 @@ def index():
     return render_template("home.html", recettes=recettes)
 
 @app.route("/recettes", methods=["GET", "POST"])
-@login_required
 def recettes():
     # Récupérer les paramètres de la requête
     if request.method == "POST":
@@ -304,26 +315,49 @@ def recettes():
 
 
 @app.route("/recettes/<nom_recete>", methods=["GET"])
-@login_required
 def recette_detail(nom_recete):
     # Obtenir la recette
     # Afficher la liste des recettes africaines
+
+    recette = []
+
+    while recette == []:
+        recette = openai.Completion.create(
+            engine="gpt-3.5-turbo-instruct",
+            prompt=f"Expliques comment faire la recette : {nom_recete} . La recette est au format JSON avec les clés : titre, nombres_personnes, ingredients, temps_cuisson, etapes. Les clés en minuscules, avec temps_cuisson contenant juste le temps total de cuisson. Fournir une liste contenant 1 dictionnaire représentant la recette, sans texte supplémentaire avant et après la liste.",
+            max_tokens=4000
+        )
+
+        recette = recette.choices[0].text.strip()
+            # list to json
+
+        recette = extract_json(recette)
+
+        print("apres detail", recette)
+
+    # Afficher la page de détail de la recette
+    return render_template("recette_detail.html", nom_recete=nom_recete, recette=recette)
+
+@app.route("/recettes/test", methods=["GET", "POST"])
+def recette_detail_test():
+    # Obtenir la recette
+    # Afficher la liste des recettes africaines
+    nom_recete = request.form['nom_recette']
     recette = openai.Completion.create(
         engine="gpt-3.5-turbo-instruct",
-        prompt=f"Expliques comment faire la recette : {nom_recete} réponds en francais stp ! La recette au format JSON avec les clés : titre, nombres_personnes, ingredients, temps_cuisson, etapes. Les clés en minuscules, avec temps_cuisson contenant juste le temps total de cuisson. La réponse est une liste contenu dans un dictionnaire représentant la recette, sans texte avant ou après la liste.",
+        prompt=f"Expliques comment faire la recette : {nom_recete} . La recette est au format JSON avec les clés : titre, nombres_personnes, ingredients, temps_cuisson, etapes. Les clés en minuscules, avec temps_cuisson contenant juste le temps total de cuisson. Fournir une liste contenant 1 dictionnaire représentant la recette, sans texte supplémentaire avant ou après la liste.",
         max_tokens=4000
     )
 
     recette = recette.choices[0].text.strip()
         # list to json
+    
+    # try:
+    #     recette = json.loads(recette)
+    # except:
+    #     recette = []
 
-    try:
-        recette = json.loads(recette)
-    except:
-        recette = []
-
-    # Afficher la page de détail de la recette
-    return render_template("recette_detail.html", nom_recete=nom_recete, recette=recette)
+    return jsonify(result=recette)
 
 @app.route("/recettes/<nom_recete>/recommandations", methods=["GET", "POST"]) 
 @login_required
